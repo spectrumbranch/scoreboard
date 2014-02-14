@@ -69,7 +69,7 @@ db.init([], function() {
 		
 		for (var i = 0; i < scores.length; i++) {
 			var scoreName = scores[i].name;
-			var scoreValue = scores[i].name;
+			var scoreValue = scores[i].value;
 			var scorePlace = i+1;
 			var theScore = { name: scoreName, value: scoreValue, place: scorePlace };
 			
