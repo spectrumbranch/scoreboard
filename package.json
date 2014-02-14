@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/spectrumbranch/scoreboard",
   "dependencies": {
-    "hapi": "~2.2.0"
+    "hapi": "~2.2.0",
+    "sequelize": "~1.7.0-rc5",
+    "mysql": "~2.0.1",
+    "async": "~0.2.10"
   }
 }

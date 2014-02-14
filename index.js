@@ -20,6 +20,12 @@ server.route([
 	},
 	{ method: '*', 	path: '/{path*}', handler: { directory: { path: './static/', listing: false, redirectToSlash: true } } }
 ]);
-server.start();
 
-console.log('Server up');
+var db = require('./lib/models');
+db.init([], function() {
+    console.log('database setup complete');
+    
+    //start server
+    server.start();
+    console.log('Server up at ' + server.info.uri + ' !');
+});
