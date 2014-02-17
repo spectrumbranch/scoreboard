@@ -7,8 +7,9 @@
 		<link rel="stylesheet" href="css/foundation.css" />
 		<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 		<script src="js/vendor/modernizr.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
 	</head>
-	<body>
+	<body ng-app="scoresApp">
 		<div class="row">
 			<div class="large-12 columns">&nbsp;</div>
 		</div>
@@ -24,62 +25,42 @@
 			</div>
 		</div>
 		<br>
-		<div class="row">
-			<ul class="small-block-grid-3">
-				<li class="text-center">#1</li>
-				<li class="text-center">SJP</li>
-				<li class="text-center">1000000</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#2</li>
-				<li class="text-center">MLR</li>
-				<li class="text-center">0939488</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#3</li>
-				<li class="text-center">CAB</li>
-				<li class="text-center">0863466</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#4</li>
-				<li class="text-center">SJP</li>
-				<li class="text-center">0763466</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#5</li>
-				<li class="text-center">MLR</li>
-				<li class="text-center">0163466</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#6</li>
-				<li class="text-center">CAB</li>
-				<li class="text-center">0063466</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#7</li>
-				<li class="text-center">SJP</li>
-				<li class="text-center">0050093</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#8</li>
-				<li class="text-center">MLR</li>
-				<li class="text-center">0003466</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#9</li>
-				<li class="text-center">CAB</li>
-				<li class="text-center">0000200</li>
-			</ul>
-			<ul class="small-block-grid-3">
-				<li class="text-center">#10</li>
-				<li class="text-center">SJP</li>
-				<li class="text-center">0000001</li>
+
+		<div class="row" ng-controller="setScores">
+			<ul class="small-block-grid-3" ng-repeat="scores in ListOfScores">
+				<li class="text-center">#{{scores.place}}</li>
+				<li class="text-center">{{scores.name}}</li>
+				<li class="text-center">{{scores.value}}</li>
 			</ul>
 		</div>
 		<script src="js/vendor/jquery.js"></script>
 		<script src="js/foundation.min.js"></script>
 		<script>
 		$(document).foundation();
+		</script>
+		<script>
+
+		function pad(number, size) {
+			var zeroesToAdd = 7 - size
+			var newNumber = number
+			for (var x = zeroesToAdd - 1; x >= 0; x--) {
+				newNumber = "0" + newNumber
+			};
+			return newNumber
+		}
+		var scoresApp = angular.module('scoresApp',[])
+	
+		function setScores($scope, $http){
+			$http({method: 'GET', url: '/games/1/scores'}).success(function(data, status, headers, config) {
+				$scope.ListOfScores = data.scores
+				for (var score in $scope.ListOfScores){
+					var value = $scope.ListOfScores[score].value;
+					var valueLength = value.toString().length;
+					$scope.ListOfScores[score].value = pad(value,valueLength)
+				}
+			}).error(function(data, status, headers, config) {
+			});
+		}
 		</script>
 	</body>
 </html>
