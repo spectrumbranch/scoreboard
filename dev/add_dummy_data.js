@@ -14,7 +14,10 @@ var scoreFn = function (inputScore, game, db) {
 		});
 	}
 }
-
+//sort stuff needs to move to api read level
+var scoreCompare = function(a,b) {
+  return a.value < b.value;
+}
 
 db.init([], function() {
     console.log('database setup complete');
@@ -26,11 +29,11 @@ db.init([], function() {
 			name: 'CAB'
 		},
 		{
-			value: 99999,
+			value: 999999,
 			name: 'SJP'
 		},
 		{
-			value: 25041,
+			value: 250410,
 			name: 'MLR'
 		},
 		{
@@ -66,7 +69,7 @@ db.init([], function() {
     
 	db.Game.create({ name: gameName }).success(function(game) {
 		var scoreCreators = [];
-		
+		scores.sort(scoreCompare);
 		for (var i = 0; i < scores.length; i++) {
 			var scoreName = scores[i].name;
 			var scoreValue = scores[i].value;
