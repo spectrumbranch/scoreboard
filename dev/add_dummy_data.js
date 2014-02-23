@@ -5,10 +5,9 @@ var async = require('async');
 var scoreFn = function (inputScore, game, db) {
 	var scoreName = inputScore.name;
 	var scoreValue = inputScore.value;
-	var scorePlace = inputScore.place;
 	
 	return function(cb) {
-		db.Score.create({ name: scoreName, value: scoreValue, place: scorePlace}).success(function(score) {
+		db.Score.create({ name: scoreName, value: scoreValue}).success(function(score) {
 			score.setGame(game);
 			cb();
 		});
@@ -22,7 +21,7 @@ var scoreCompare = function(a,b) {
 db.init([], function() {
     console.log('database setup complete');
 	
-	//1 game, 10 scores
+	//1 game, 10 scores + 90 loop generated
 	var scores = [
 		{
 			value: 1000000,
@@ -53,7 +52,7 @@ db.init([], function() {
 			name: 'SJP'
 		},
 		{
-			value: 514679,
+			value: 0,
 			name: 'HAH'
 		},
 		{
@@ -65,18 +64,19 @@ db.init([], function() {
 			name: 'LOL'
 		}
 	];
+	for (var i = 0; i < 90; i++) {
+		scores.push({ value: i*100, name: 'A'+i});
+	}
+	
 	var gameName = 'Example Game 2014!';
+	
+	
     
 	db.Game.create({ name: gameName }).success(function(game) {
 		var scoreCreators = [];
 		scores.sort(scoreCompare);
 		for (var i = 0; i < scores.length; i++) {
-			var scoreName = scores[i].name;
-			var scoreValue = scores[i].value;
-			var scorePlace = i+1;
-			var theScore = { name: scoreName, value: scoreValue, place: scorePlace };
-			
-			scoreCreators.push(scoreFn(theScore, game, db));
+			scoreCreators.push(scoreFn(scores[i], game, db));
 		}
 		
 		async.parallel(scoreCreators, function(err, results) {
