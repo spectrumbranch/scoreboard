@@ -26,41 +26,27 @@
 		</div>
 		<br>
 
-		<div class="row" ng-controller="setScores">
-			<ul class="small-block-grid-3" ng-repeat="scores in ListOfScores">
-				<li class="text-center">#{{scores.place}}</li>
-				<li class="text-center">{{scores.name}}</li>
-				<li class="text-center">{{scores.value}}</li>
+		<div class="row" ng-controller="ScoreController">
+			<ul class="small-block-grid-3" ng-repeat="item in data | startFrom:currentPage*pageSize | limitTo:pageSize">
+				<li class="text-center">#{{item.id}}</li>
+				<li class="text-center">{{item.name}}</li>
+				<li class="text-center">{{item.value}}</li>
 			</ul>
+			<ul class="small-block-grid-1">
+				<li class="text-center">
+					<button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" class="success">Previous</button>
+		    		{{currentPage+1}}/{{data.length/pageSize}}
+		    		<button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1" class="success">Next</button>
+				</li>
+			</ul>
+			
 		</div>
+
 		<script src="js/vendor/jquery.js"></script>
 		<script src="js/foundation.min.js"></script>
 		<script>
 		$(document).foundation();
 		</script>
-		<script>
-
-		function pad(number, size) {
-			var zeroesToAdd = 7 - size
-			var newNumber = number
-			for (var x = zeroesToAdd - 1; x >= 0; x--) {
-				newNumber = "0" + newNumber
-			};
-			return newNumber
-		}
-		var scoresApp = angular.module('scoresApp',[])
-	
-		function setScores($scope, $http){
-			$http({method: 'GET', url: '/games/1/scores'}).success(function(data, status, headers, config) {
-				$scope.ListOfScores = data.scores
-				for (var score in $scope.ListOfScores){
-					var value = $scope.ListOfScores[score].value;
-					var valueLength = value.toString().length;
-					$scope.ListOfScores[score].value = pad(value,valueLength)
-				}
-			}).error(function(data, status, headers, config) {
-			});
-		}
-		</script>
+		<script src="js/app.js"></script>
 	</body>
 </html>
