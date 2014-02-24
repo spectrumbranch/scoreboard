@@ -25,23 +25,42 @@
 			</div>
 		</div>
 		<br>
-		<!-- currentPage*pageSize -->
+
 		<div class="row" ng-controller="setScores">
-			<ul class="small-block-grid-3" ng-repeat="item in data" id="Row{{$index + 1}}">
-				<li class="text-center">#{{$index + 1}}</li>
-				<li class="text-center">{{data[$index].name}}</li>
-				<li class="text-center">{{data[$index].value}}</li>
+			<ul class="small-block-grid-3" ng-repeat="scores in ListOfScores">
+				<li class="text-center">#{{scores.place}}</li>
+				<li class="text-center">{{scores.name}}</li>
+				<li class="text-center">{{scores.value}}</li>
 			</ul>
 		</div>
-
-		
-
-
 		<script src="js/vendor/jquery.js"></script>
 		<script src="js/foundation.min.js"></script>
 		<script>
 		$(document).foundation();
 		</script>
-		<script src="js/app.js"></script>
+		<script>
+
+		function pad(number, size) {
+			var zeroesToAdd = 7 - size
+			var newNumber = number
+			for (var x = zeroesToAdd - 1; x >= 0; x--) {
+				newNumber = "0" + newNumber
+			};
+			return newNumber
+		}
+		var scoresApp = angular.module('scoresApp',[])
+	
+		function setScores($scope, $http){
+			$http({method: 'GET', url: '/games/1/scores'}).success(function(data, status, headers, config) {
+				$scope.ListOfScores = data.scores
+				for (var score in $scope.ListOfScores){
+					var value = $scope.ListOfScores[score].value;
+					var valueLength = value.toString().length;
+					$scope.ListOfScores[score].value = pad(value,valueLength)
+				}
+			}).error(function(data, status, headers, config) {
+			});
+		}
+		</script>
 	</body>
 </html>
