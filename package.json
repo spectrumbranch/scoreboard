@@ -4,7 +4,7 @@
   "description": "scoreboard ==========",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "add-dummy-data": "node dev/add_dummy_data.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "mysql": "~2.0.1",
     "async": "~0.2.10"
   },
-  "scripts": {
-	"add-dummy-data": "node dev/add_dummy_data.js"
+  "devDependencies": {
+    "mocha": "~1.17.1"
   }
 }
